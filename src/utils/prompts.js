@@ -37,6 +37,7 @@ export const UI_STRINGS = {
     error: 'Sorry, something went wrong. Please try again.',
     noUnderstand: 'Sorry, I could not understand that.',
     modes: {
+      auto: 'Auto mode',
       scene: 'Scene mode',
       ocr: 'Read mode',
       currency: 'Currency mode',
@@ -50,6 +51,7 @@ export const UI_STRINGS = {
     error: 'क्षमा करें, कुछ गलत हो गया। फिर से प्रयास करें।',
     noUnderstand: 'क्षमा करें, मुझे समझ नहीं आया।',
     modes: {
+      auto: 'ऑटो मोड',
       scene: 'दृश्य मोड',
       ocr: 'पढ़ने वाला मोड',
       currency: 'मुद्रा मोड',
@@ -63,6 +65,7 @@ export const UI_STRINGS = {
     error: 'ಕ್ಷಮಿಸಿ, ಏನೋ ತಪ್ಪಾಗಿದೆ. ದಯವಿಟ್ಟು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.',
     noUnderstand: 'ಕ್ಷಮಿಸಿ, ಅದು ನನಗೆ ಅರ್ಥವಾಗಲಿಲ್ಲ.',
     modes: {
+      auto: 'ಆಟೋ ಮೋಡ್',
       scene: 'ದೃಶ್ಯ ಮೋಡ್',
       ocr: 'ಓದುವ ಮೋಡ್',
       currency: 'ಹಣದ ಮೋಡ್',
@@ -70,6 +73,16 @@ export const UI_STRINGS = {
     },
   },
 }
+
+// Gemini fallback prompt for the mode router when MobileNet fails
+// Handles detection + description in a single call
+export const AUTO_PROMPT = `You are Sahaay, an AI assistant for visually impaired users in India.
+Look at this image and give the most helpful response for a visually impaired person:
+- If you see an Indian rupee note, say the denomination clearly.
+- If you see a person, briefly describe them in 1-2 sentences.
+- If you see readable text (signs, labels, medicine, documents), read the most important text.
+- Otherwise, describe the scene in 2-3 sentences.
+Be direct and concise. Do not explain what you are doing.`
 
 // Helper: pick the right prompt for a given mode
 export function getPrompt(mode) {
