@@ -4,6 +4,7 @@ import { useVision } from './useVision'
 import { speak, stopSpeaking, LANG_CODES } from '../utils/tts'
 import { UI_STRINGS } from '../utils/prompts'
 import { vibrate, VIBRATIONS } from '../utils/haptics'
+import { getCachedResponse } from '../utils/cache'
 
 // ─── useAI ────────────────────────────────────────────────────────────────────
 // The master hook for Sahaay AI. Composes Vision, Mic (STT), and TTS.
@@ -46,7 +47,8 @@ export function useAI() {
         vision.analyzeFrame(mode)
       ])
 
-      const result = aiText || userText || str.noUnderstand
+      // Voice emergency: last cached response for this mode if all paths return empty
+      const result = aiText || userText || getCachedResponse(mode) || str.noUnderstand
       setResponse(result)
 
       setStatus('speaking')
@@ -143,5 +145,6 @@ export function useAI() {
     isAnalyzing: vision.isAnalyzing,
     micSupported: mic.supported,
     supported: mic.supported,
+    detectedMode: vision.detectedMode,
   }
 }

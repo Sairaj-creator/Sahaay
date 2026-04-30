@@ -9,7 +9,7 @@ const STATUS_COLORS = {
   error:     'bg-red-900/40 text-red-300 border-red-800',
 }
 
-const MODES = ['scene', 'ocr', 'currency', 'face']
+const MODES = ['auto', 'scene', 'ocr', 'currency', 'face']
 const LANGUAGES = [
   { code: 'en', label: 'English' },
   { code: 'hi', label: 'हिंदी' },
@@ -21,7 +21,7 @@ export default function App() {
     status, response, error, mode, lang,
     trigger, switchMode, switchLanguage,
     videoRef, startCamera, stopCamera, cameraReady,
-    isRecording, isTranscribing, isAnalyzing,
+    isRecording, isTranscribing, isAnalyzing, detectedMode,
   } = useAI()
 
   useEffect(() => { 
@@ -54,14 +54,21 @@ export default function App() {
       </div>
 
       {/* Mode Selectors */}
-      <div className="flex flex-wrap justify-center gap-2 max-w-xs">
-        {MODES.map((m) => (
-          <button key={m} onClick={() => switchMode(m)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider border transition-all
-              ${mode === m ? 'bg-blue-600 border-blue-400 shadow-lg shadow-blue-900/40 text-white scale-105' : 'bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-600'}`}>
-            {m}
-          </button>
-        ))}
+      <div className="flex flex-col items-center gap-1.5">
+        <div className="flex flex-wrap justify-center gap-2 max-w-xs">
+          {MODES.map((m) => (
+            <button key={m} onClick={() => switchMode(m)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider border transition-all
+                ${mode === m ? 'bg-blue-600 border-blue-400 shadow-lg shadow-blue-900/40 text-white scale-105' : 'bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-600'}`}>
+              {m}
+            </button>
+          ))}
+        </div>
+        {mode === 'auto' && detectedMode && (
+          <span className="text-[10px] text-slate-500 uppercase tracking-widest">
+            detected: {detectedMode}
+          </span>
+        )}
       </div>
 
       {/* Language Selectors */}
@@ -104,9 +111,9 @@ export default function App() {
       )}
 
       <p className="text-[10px] text-slate-700 text-center max-w-[200px] leading-tight">
-        Team Lead AI Harness. Powered by Gemini 1.5 Flash & Browser STT. 
-        <br/>Haptics & Multi-language active. 
-        <br/>Ready for integration with Sanjana's Orb UI.
+        Gemini → Groq → cached fallback chain active.
+        <br/>Web Speech → Whisper fallback active.
+        <br/>MobileNet auto-mode · Haptics · Multi-language.
       </p>
     </div>
   )
